@@ -1,0 +1,63 @@
+public class LibraryISBNNormalizer {
+
+    public static String normalizeCode(String raw) {
+
+        raw = raw.trim();
+
+        if (raw.length() >= 3) {
+            raw = raw.substring(0, 3).toUpperCase()
+                    + raw.substring(3);
+        }
+
+        return raw;
+    }
+
+    public static String validateAndFormat(String code) {
+
+        if (code.length() != 13) {
+            return "Invalid: wrong length";
+        }
+
+        for (int i = 0; i < 3; i++) {
+            if (!Character.isLetter(code.charAt(i))) {
+                return "Invalid: publisher code must be 3 letters";
+            }
+        }
+
+        for (int i = 3; i < 13; i++) {
+            if (!Character.isDigit(code.charAt(i))) {
+                return "Invalid: non-digit body";
+            }
+        }
+
+        String pubCode = code.substring(0, 3);
+        String year = code.substring(3, 7);
+        String catalog = code.substring(7);
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("[")
+          .append(pubCode)
+          .append("] YEAR: ")
+          .append(year)
+          .append(" | CATALOG: ")
+          .append(catalog);
+
+        return sb.toString();
+    }
+
+    public static void main(String[] args) {
+
+        String code1 =
+                normalizeCode(" pen2026004251 ");
+
+        System.out.println(
+                validateAndFormat(code1));
+
+        String code2 =
+                normalizeCode("12N2026004251");
+
+        System.out.println(
+                validateAndFormat(code2));
+    }
+}
